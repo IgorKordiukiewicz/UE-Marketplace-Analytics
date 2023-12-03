@@ -1,4 +1,4 @@
 <div class="flex flex-column gap-2 screen-center">
   <p-fileUpload mode="basic" [auto]="true" chooseLabel="Upload Sales Report File (.csv)" accept=".csv" url="https://www.primefaces.org/cdn/api/upload.php" (onUpload)="onFileUpload($event)"></p-fileUpload>
-  <button pButton label="Continue" class="p-button-success" style="width: 100%;" [disabled]="!uploadedFile"></button>
+  <button pButton label="Continue" class="p-button-success" style="width: 100%;" [disabled]="!uploadedFile" (click)="createModel()"></button>
 </div>
