@@ -6,30 +6,44 @@ import Papa from 'papaparse';
   providedIn: 'root'
 })
 export class AnalyticsService {
+  private items: SaleItem[] = [];
+  allProducts: string[] = [];
+  allDays: string[] = [];
 
   constructor() { }
 
-  getRevenueData(items: SaleItem[]) {
-    let result = new Map<string, [string, number][]>();
+  setItems(items: SaleItem[]) {
+    this.items = items;
+    this.allProducts = this.getAllProducts();
+    this.allDays = this.getAllDays();
+  }
 
-    console.log(items.length);
-    for(let item of items) {
-      console.log(item);
-      if(!result.has(item.day)) {
-        const array: [string, number][] = [ [item.product, item.basePrice * item.netUnits] ];
-        result.set(item.day, array);
-      }
-      else {
-        const current = result.get(item.day)!;
-        current.push([item.product, item.basePrice * item.netUnits]);
-        result.set(item.day, current);
+  getRevenueData(items: SaleItem[]) {
+    let revenueByProduct = new Map<string, number[]>(this.allProducts.map(x => [x, []]));
+
+    for(let day of this.allDays) {
+      for(let product of this.allProducts) {
+        const item = items.find(x => x.day === day && x.product === product);
+
+        let revenue = 0;
+        if(item) {
+          revenue = item.basePrice * item.netUnits;
+        }
+
+        const dailyRevenues = revenueByProduct.get(product)!;
+        dailyRevenues.push(revenue);
+        revenueByProduct.set(product, dailyRevenues);
       }
     }
 
-    return result;
+    return revenueByProduct;
   }
 
-  getAllProducts(items: SaleItem[]) {
-    return Array.from(new Set(items.map(x => x.product)));
+  private getAllProducts() {
+    return Array.from(new Set(this.items.map(x => x.product)));
+  }
+
+  private getAllDays() {
+    return Array.from(new Set(this.items.map(x => x.day)));
   }
 }

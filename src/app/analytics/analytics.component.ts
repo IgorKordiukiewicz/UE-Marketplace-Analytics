@@ -50,7 +50,7 @@ export class AnalyticsComponent {
           day: row['Day'],
           product: row['Product'],
           basePrice: +(row['Base Price'] as string).slice(1),
-          netUnits: row['Net Units']
+          netUnits: +row['Net Units']
         }));
         this.items.pop();
         this.getChartData();
@@ -61,21 +61,9 @@ export class AnalyticsComponent {
   }
 
   getChartData() {
-    this.revenueByDay = this.analyticsService.getRevenueData(this.items);
-    let allProducts = this.analyticsService.getAllProducts(this.items);
-
-    let revenueByProduct = new Map<string, number[]>(allProducts.map(x => [x, []]));
-
-    for(let [day, products] of this.revenueByDay) {
-      for(let product of allProducts) {
-        var dayRevenue = products.find(x => x[0] == product)?.[1] ?? 0;
-        const dailyRevenues = revenueByProduct.get(product)!;
-        dailyRevenues.push(dayRevenue);
-        revenueByProduct.set(product, dailyRevenues);
-      }
-    }
-
-    console.log(revenueByProduct);
+    this.analyticsService.setItems(this.items);
+    let allProducts = this.analyticsService.allProducts;
+    let revenueByProduct = this.analyticsService.getRevenueData(this.items);
 
     this.revenueByDayChartOptions = {
       title: {
@@ -99,7 +87,7 @@ export class AnalyticsComponent {
       },
       xAxis: {
         type: 'category',
-        data: Array.from(this.revenueByDay.keys())
+        data: this.analyticsService.allDays
       },
       yAxis: {
         type: 'value'
