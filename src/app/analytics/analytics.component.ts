@@ -24,7 +24,7 @@ export class AnalyticsComponent {
   uploadedFile?: File;
   fileSubmitted = false;
   items: SaleItem[] = [];
-  revenueByDay?: Map<string, [string, number][]>;
+  revenueByDay?: Map<string, [string, number][]>; // Map<day, [product, revenue][]> TODO: create type for it?
 
   constructor(private analyticsService: AnalyticsService) {}
 
