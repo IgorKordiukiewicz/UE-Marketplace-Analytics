@@ -35,6 +35,7 @@ export class AnalyticsComponent {
   salesTypeSelectOptions = [ { label: 'Revenue', value: SalesType.Revenue }, { label: 'Units', value: SalesType.Units } ];
 
   salesByDayChartOptions = new Map<SalesType, EChartsOption>();
+  cumulativeSalesByDayChartOptions = new Map<SalesType, EChartsOption>();
 
   constructor(private analyticsService: AnalyticsService) {}
 
@@ -68,11 +69,13 @@ export class AnalyticsComponent {
 
   createChartData() {
     this.analyticsService.setItems(this.items);
-    let allProducts = this.analyticsService.allProducts;
     let sales = this.analyticsService.getSalesData(this.items);
 
-    this.createSalesBarChart('Revenue per day', sales, 0);
-    this.createSalesBarChart('Unit sold per day', sales, 1);
+    this.createSalesBarChart('Revenue per day', sales, SalesType.Revenue);
+    this.createSalesBarChart('Units sold per day', sales, SalesType.Units);
+
+    this.createCumulativeSalesAreaChart('Cumulative revenue per day', sales, SalesType.Revenue);
+    this.createCumulativeSalesAreaChart('Cumulative units sold per day', sales, SalesType.Units);
   }
 
   private createSalesBarChart(title: string, sales: Sales, salesType: SalesType) {
@@ -128,5 +131,61 @@ export class AnalyticsComponent {
         large: true
       }))
     })
+  }
+
+  private createCumulativeSalesAreaChart(title: string, sales: Sales, salesType: SalesType) {
+    this.cumulativeSalesByDayChartOptions.set(salesType, {
+      title: {
+        text: title,
+        left: 'center',
+        textStyle: {
+          color: '#fbfbfe'
+        },
+        show: false
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow'
+        }
+      },
+      legend: {
+        textStyle: {
+          color: '#fbfbfe'
+        },
+      },
+      grid: {
+        bottom: 90
+      },
+      dataZoom: [
+        {
+          type: 'inside'
+        },
+        {
+          type: 'slider'
+        }
+      ],
+      xAxis: {
+        type: 'category',
+        data: this.analyticsService.allDays
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: this.analyticsService.allProducts.map(x => ({
+        name: x,
+        type: 'line',
+        stack: 'total',
+        areaStyle: {},
+        label: {
+          show: false
+        },
+        emphasis: {
+          focus: 'series'
+        },
+        data: sales.getCumulativeProductSales(x, salesType),
+        large: true
+      }))
+    });
   }
 }

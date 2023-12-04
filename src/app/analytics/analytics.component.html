@@ -9,4 +9,5 @@
     <p-selectButton [options]="salesTypeSelectOptions" [(ngModel)]="salesTypeSelected"></p-selectButton>
   </div>
   <div echarts [options]="salesByDayChartOptions.get(salesTypeSelected)!"></div>
+  <div echarts [options]="cumulativeSalesByDayChartOptions.get(salesTypeSelected)!"></div>
 </ng-container>

@@ -26,4 +26,21 @@ export class Sales {
   getProductSales(product: string, type: SalesType) {
     return this.salesByProduct.get(product)?.get(type);
   }
+
+  getCumulativeProductSales(product: string, type: SalesType) {
+    const sales = this.getProductSales(product, type);
+    if(!sales) {
+      return;
+    }
+
+    const result: number[] = [];
+
+    let runningTotal = 0;
+    for(let dailySales of sales) {
+      runningTotal += dailySales;
+      result.push(runningTotal);
+    }
+
+    return result;
+  }
 }
