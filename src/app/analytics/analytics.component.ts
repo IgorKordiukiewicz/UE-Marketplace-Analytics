@@ -5,6 +5,7 @@ import { HttpEvent } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { SaleItem } from '../shared/models/SaleItem';
 import { AnalyticsService } from './analytics.service';
+import Papa from 'papaparse';
 
 interface UploadEvent {
   originalEvent: HttpEvent<any>;
@@ -23,6 +24,7 @@ export class AnalyticsComponent {
   uploadedFile?: File;
   fileSubmitted = false;
   items: SaleItem[] = [];
+  revenueByDay?: Map<string, [string, number][]>;
 
   constructor(private analyticsService: AnalyticsService) {}
 
@@ -35,7 +37,27 @@ export class AnalyticsComponent {
       return;
     }
 
-    this.items = this.analyticsService.parseSalesFile(this.uploadedFile);
+    Papa.parse(this.uploadedFile, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        const data = results.data as any[];
+        this.items = data.map(row => ({
+          day: row['Day'],
+          product: row['Product'],
+          basePrice: +(row['Base Price'] as string).slice(1),
+          netUnits: row['Net Units']
+        }));
+        this.items.pop();
+        this.getChartData();
+      }
+    });
+
     this.fileSubmitted = true;
+  }
+
+  getChartData() {
+    this.revenueByDay = this.analyticsService.getRevenueData(this.items);
+    console.log(this.revenueByDay);
   }
 }

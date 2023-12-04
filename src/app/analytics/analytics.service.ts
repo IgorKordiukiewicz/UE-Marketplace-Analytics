@@ -9,24 +9,23 @@ export class AnalyticsService {
 
   constructor() { }
 
-  parseSalesFile(file: File) {
-    let items: SaleItem[] = [];
+  getRevenueData(items: SaleItem[]) {
+    let result = new Map<string, [string, number][]>();
 
-    Papa.parse(file, {
-      header: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        const data = results.data as any[];
-        items = data.map(row => ({
-          day: row['Day'],
-          product: row['Product'],
-          basePrice: row['Base Price'],
-          netUnits: row['Net Units']
-        }));
-        items.pop();
+    console.log(items.length);
+    for(let item of items) {
+      console.log(item);
+      if(!result.has(item.day)) {
+        const array: [string, number][] = [ [item.product, item.basePrice * item.netUnits] ];
+        result.set(item.day, array);
       }
-    });
+      else {
+        const current = result.get(item.day)!;
+        current.push([item.product, item.basePrice * item.netUnits]);
+        result.set(item.day, current);
+      }
+    }
 
-    return items;
+    return result;
   }
 }
