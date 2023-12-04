@@ -10,6 +10,8 @@ import { EChartsOption } from 'echarts';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { Sales } from '../shared/models/Sales';
 import { SalesType } from '../shared/models/SalesType';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { FormsModule } from '@angular/forms';
 
 interface UploadEvent {
   originalEvent: HttpEvent<any>;
@@ -19,7 +21,7 @@ interface UploadEvent {
 @Component({
   selector: 'app-analytics',
   standalone: true,
-  imports: [ FileUploadModule, ButtonModule, CommonModule, NgxEchartsModule ],
+  imports: [ FileUploadModule, ButtonModule, CommonModule, NgxEchartsModule, SelectButtonModule, FormsModule ],
   templateUrl: './analytics.component.html',
   styleUrl: './analytics.component.scss'
 })
@@ -29,7 +31,10 @@ export class AnalyticsComponent {
   fileSubmitted = false;
   items: SaleItem[] = [];
 
-  salesByDayChartOptions: EChartsOption[] = [];
+  salesTypeSelected = SalesType.Revenue;
+  salesTypeSelectOptions = [ { label: 'Revenue', value: SalesType.Revenue }, { label: 'Units', value: SalesType.Units } ];
+
+  salesByDayChartOptions = new Map<SalesType, EChartsOption>();
 
   constructor(private analyticsService: AnalyticsService) {}
 
@@ -71,7 +76,7 @@ export class AnalyticsComponent {
   }
 
   private createSalesBarChart(title: string, sales: Sales, salesType: SalesType) {
-    this.salesByDayChartOptions.push({
+    this.salesByDayChartOptions.set(salesType, {
       title: {
         text: title,
         left: 'center',

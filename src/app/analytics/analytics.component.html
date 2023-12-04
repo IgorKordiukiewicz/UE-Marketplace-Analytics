@@ -3,7 +3,10 @@
   <button pButton label="Continue" class="p-button-success" style="width: 100%;" [disabled]="!uploadedFile" (click)="onContinue()"></button>
 </div>
 
-<ng-container *ngIf="salesByDayChartOptions.length > 0">
-  <div echarts [options]="salesByDayChartOptions[0]"></div>
-  <div echarts [options]="salesByDayChartOptions[1]"></div>
+<ng-container *ngIf="salesByDayChartOptions.size > 0">
+  <div class="flex gap-4 align-items-center">
+    <h2>Sales per day</h2>
+    <p-selectButton [options]="salesTypeSelectOptions" [(ngModel)]="salesTypeSelected"></p-selectButton>
+  </div>
+  <div echarts [options]="salesByDayChartOptions.get(salesTypeSelected)!"></div>
 </ng-container>
