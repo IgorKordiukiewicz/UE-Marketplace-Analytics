@@ -44,6 +44,20 @@ export class AnalyticsService {
   }
 
   private getAllDays() {
-    return Array.from(new Set(this.items.map(x => x.day)));
+    if(this.items.length == 0) {
+      return [];
+    }
+
+    const allDays: string[] = [];
+
+    let currentDate = new Date(this.items.at(-1)!.day);
+    const endDate = new Date(this.items[0].day);
+
+    while(currentDate <= endDate) {
+      allDays.push(currentDate.toISOString().split('T')[0]);
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return allDays;
   }
 }
