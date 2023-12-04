@@ -10,15 +10,19 @@ import {
   TitleComponent,
   TooltipComponent,
   GridComponent,
-  LegendComponent
+  LegendComponent,
+  DataZoomComponent,
 } from 'echarts/components';
 import {
   CanvasRenderer
 } from 'echarts/renderers';
 
 echarts.use(
-  [TitleComponent, TooltipComponent, GridComponent,
-    LegendComponent, BarChart, CanvasRenderer]
+  [
+    TitleComponent, TooltipComponent, GridComponent,
+    LegendComponent, BarChart, CanvasRenderer,
+    DataZoomComponent
+  ]
 );
 
 export const appConfig: ApplicationConfig = {

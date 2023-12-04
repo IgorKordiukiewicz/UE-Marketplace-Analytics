@@ -96,6 +96,17 @@ export class AnalyticsComponent {
           color: '#fbfbfe'
         },
       },
+      grid: {
+        bottom: 90
+      },
+      dataZoom: [
+        {
+          type: 'inside'
+        },
+        {
+          type: 'slider'
+        }
+      ],
       xAxis: {
         type: 'category',
         data: this.analyticsService.allDays
@@ -113,7 +124,8 @@ export class AnalyticsComponent {
         emphasis: {
           focus: 'series'
         },
-        data: sales.getProductSales(x, salesType)
+        data: sales.getProductSales(x, salesType),
+        large: true
       }))
     })
   }
