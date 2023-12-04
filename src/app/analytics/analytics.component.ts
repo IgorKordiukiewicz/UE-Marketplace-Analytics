@@ -6,8 +6,10 @@ import { CommonModule, KeyValuePipe } from '@angular/common';
 import { SaleItem } from '../shared/models/SaleItem';
 import { AnalyticsService } from './analytics.service';
 import Papa from 'papaparse';
-import { EChartsOption, BarSeriesOption } from 'echarts';
+import { EChartsOption } from 'echarts';
 import { NgxEchartsModule } from 'ngx-echarts';
+import { Sales } from '../shared/models/Sales';
+import { SalesType } from '../shared/models/SalesType';
 
 interface UploadEvent {
   originalEvent: HttpEvent<any>;
@@ -62,13 +64,13 @@ export class AnalyticsComponent {
   createChartData() {
     this.analyticsService.setItems(this.items);
     let allProducts = this.analyticsService.allProducts;
-    let salesByProduct = this.analyticsService.getSalesData(this.items);
+    let sales = this.analyticsService.getSalesData(this.items);
 
-    this.createSalesBarChart('Revenue per day', salesByProduct, 0);
-    this.createSalesBarChart('Unit sold per day', salesByProduct, 1);
+    this.createSalesBarChart('Revenue per day', sales, 0);
+    this.createSalesBarChart('Unit sold per day', sales, 1);
   }
 
-  private createSalesBarChart(title: string, salesByProduct: Map<string, [number[], number[]]>, salesDataIndex: number) {
+  private createSalesBarChart(title: string, sales: Sales, salesType: SalesType) {
     this.salesByDayChartOptions.push({
       title: {
         text: title,
@@ -106,7 +108,7 @@ export class AnalyticsComponent {
         emphasis: {
           focus: 'series'
         },
-        data: salesByProduct.get(x)![salesDataIndex]
+        data: sales.getProductSales(x, salesType)
       }))
     })
   }

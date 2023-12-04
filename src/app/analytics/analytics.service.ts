@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SaleItem } from '../shared/models/SaleItem';
-import Papa from 'papaparse';
+import { Sales } from '../shared/models/Sales';
+
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,7 @@ export class AnalyticsService {
   }
 
   getSalesData(items: SaleItem[]) {
-    // <product, [revenues[], units[]]>
-    let revenueByProduct = new Map<string, [number[], number[]]>(this.allProducts.map(x => [x, [[],[]]]));
+    let sales = new Sales(this.allProducts);
 
     for(let day of this.allDays) {
       for(let product of this.allProducts) {
@@ -33,14 +33,11 @@ export class AnalyticsService {
           units = item.netUnits;
         }
 
-        const dailySales = revenueByProduct.get(product)!;
-        dailySales[0].push(revenue);
-        dailySales[1].push(units);
-        revenueByProduct.set(product, dailySales);
+        sales.addProductSales(product, revenue, units);
       }
     }
 
-    return revenueByProduct;
+    return sales;
   }
 
   private getAllProducts() {
