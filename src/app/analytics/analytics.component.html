@@ -3,6 +3,7 @@
   <button pButton label="Continue" class="p-button-success" style="width: 100%;" [disabled]="!uploadedFile" (click)="onContinue()"></button>
 </div>
 
-<div *ngIf="revenueByDayChartOptions">
-  <div echarts [options]="revenueByDayChartOptions"></div>
-</div>
+<ng-container *ngIf="salesByDayChartOptions.length > 0">
+  <div echarts [options]="salesByDayChartOptions[0]"></div>
+  <div echarts [options]="salesByDayChartOptions[1]"></div>
+</ng-container>

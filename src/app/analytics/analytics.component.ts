@@ -26,9 +26,8 @@ export class AnalyticsComponent {
   uploadedFile?: File;
   fileSubmitted = false;
   items: SaleItem[] = [];
-  revenueByDay?: Map<string, [string, number][]>; // Map<day, [product, revenue][]> TODO: create type for it?
 
-  revenueByDayChartOptions?: EChartsOption;
+  salesByDayChartOptions: EChartsOption[] = [];
 
   constructor(private analyticsService: AnalyticsService) {}
 
@@ -53,21 +52,26 @@ export class AnalyticsComponent {
           netUnits: +row['Net Units']
         }));
         this.items.pop();
-        this.getChartData();
+        this.createChartData();
       }
     });
 
     this.fileSubmitted = true;
   }
 
-  getChartData() {
+  createChartData() {
     this.analyticsService.setItems(this.items);
     let allProducts = this.analyticsService.allProducts;
-    let revenueByProduct = this.analyticsService.getRevenueData(this.items);
+    let salesByProduct = this.analyticsService.getSalesData(this.items);
 
-    this.revenueByDayChartOptions = {
+    this.createSalesBarChart('Revenue per day', salesByProduct, 0);
+    this.createSalesBarChart('Unit sold per day', salesByProduct, 1);
+  }
+
+  private createSalesBarChart(title: string, salesByProduct: Map<string, [number[], number[]]>, salesDataIndex: number) {
+    this.salesByDayChartOptions.push({
       title: {
-        text: 'Revenue by day',
+        text: title,
         left: 'center',
         textStyle: {
           color: '#fbfbfe'
@@ -92,7 +96,7 @@ export class AnalyticsComponent {
       yAxis: {
         type: 'value'
       },
-      series: allProducts.map(x => ({
+      series: this.analyticsService.allProducts.map(x => ({
         name: x,
         type: 'bar',
         stack: 'total',
@@ -102,8 +106,8 @@ export class AnalyticsComponent {
         emphasis: {
           focus: 'series'
         },
-        data: revenueByProduct.get(x)!
+        data: salesByProduct.get(x)![salesDataIndex]
       }))
-    }
+    })
   }
 }

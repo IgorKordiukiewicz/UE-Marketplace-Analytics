@@ -18,21 +18,25 @@ export class AnalyticsService {
     this.allDays = this.getAllDays();
   }
 
-  getRevenueData(items: SaleItem[]) {
-    let revenueByProduct = new Map<string, number[]>(this.allProducts.map(x => [x, []]));
+  getSalesData(items: SaleItem[]) {
+    // <product, [revenues[], units[]]>
+    let revenueByProduct = new Map<string, [number[], number[]]>(this.allProducts.map(x => [x, [[],[]]]));
 
     for(let day of this.allDays) {
       for(let product of this.allProducts) {
         const item = items.find(x => x.day === day && x.product === product);
 
         let revenue = 0;
+        let units = 0;
         if(item) {
           revenue = item.basePrice * item.netUnits;
+          units = item.netUnits;
         }
 
-        const dailyRevenues = revenueByProduct.get(product)!;
-        dailyRevenues.push(revenue);
-        revenueByProduct.set(product, dailyRevenues);
+        const dailySales = revenueByProduct.get(product)!;
+        dailySales[0].push(revenue);
+        dailySales[1].push(units);
+        revenueByProduct.set(product, dailySales);
       }
     }
 
