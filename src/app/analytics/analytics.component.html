@@ -3,13 +3,6 @@
   <button pButton label="Continue" class="p-button-success" style="width: 100%;" [disabled]="!uploadedFile" (click)="onContinue()"></button>
 </div>
 
-<h1 *ngIf="fileSubmitted">Hello</h1>
-
-<div *ngIf="revenueByDay">
-  <div *ngFor="let value of revenueByDay | keyvalue">
-    <h2>{{value.key}}</h2>
-    <h3 *ngFor="let item of value.value">
-      {{item[0]}} : {{item[1]}}
-    </h3>
-  </div>
+<div *ngIf="revenueByDayChartOptions">
+  <div echarts [options]="revenueByDayChartOptions"></div>
 </div>

@@ -28,4 +28,8 @@ export class AnalyticsService {
 
     return result;
   }
+
+  getAllProducts(items: SaleItem[]) {
+    return Array.from(new Set(items.map(x => x.product)));
+  }
 }
