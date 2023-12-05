@@ -1,6 +1,6 @@
 import { SalesType } from "./SalesType";
 
-export class Sales {
+export class DailySales {
   private salesByProduct: Map<string, Map<SalesType, number[]>>;
 
   constructor(allProducts: string[]) {

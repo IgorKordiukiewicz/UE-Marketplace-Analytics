@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ButtonModule } from 'primeng/button';
 import { HttpEvent } from '@angular/common/http';
-import { CommonModule, KeyValuePipe } from '@angular/common';
+import { CommonModule, CurrencyPipe, KeyValuePipe } from '@angular/common';
 import { SaleItem } from '../shared/models/SaleItem';
 import { AnalyticsService } from './analytics.service';
 import Papa from 'papaparse';
 import { EChartsOption } from 'echarts';
 import { NgxEchartsModule } from 'ngx-echarts';
-import { Sales } from '../shared/models/Sales';
+import { DailySales } from '../shared/models/DailySales';
 import { SalesType } from '../shared/models/SalesType';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule } from '@angular/forms';
@@ -69,16 +69,16 @@ export class AnalyticsComponent {
 
   createChartData() {
     this.analyticsService.setItems(this.items);
-    let sales = this.analyticsService.getSalesData(this.items);
+    let dailySales = this.analyticsService.getDailySales(this.items);
 
-    this.createSalesBarChart('Revenue per day', sales, SalesType.Revenue);
-    this.createSalesBarChart('Units sold per day', sales, SalesType.Units);
+    this.createSalesBarChart('Revenue per day', dailySales, SalesType.Revenue);
+    this.createSalesBarChart('Units sold per day', dailySales, SalesType.Units);
 
-    this.createCumulativeSalesAreaChart('Cumulative revenue per day', sales, SalesType.Revenue);
-    this.createCumulativeSalesAreaChart('Cumulative units sold per day', sales, SalesType.Units);
+    this.createCumulativeSalesAreaChart('Cumulative revenue per day', dailySales, SalesType.Revenue);
+    this.createCumulativeSalesAreaChart('Cumulative units sold per day', dailySales, SalesType.Units);
   }
 
-  private createSalesBarChart(title: string, sales: Sales, salesType: SalesType) {
+  private createSalesBarChart(title: string, dailySales: DailySales, salesType: SalesType) {
     this.salesByDayChartOptions.set(salesType, {
       title: {
         text: title,
@@ -127,13 +127,13 @@ export class AnalyticsComponent {
         emphasis: {
           focus: 'series'
         },
-        data: sales.getProductSales(x, salesType),
+        data: dailySales.getProductSales(x, salesType),
         large: true
       }))
     })
   }
 
-  private createCumulativeSalesAreaChart(title: string, sales: Sales, salesType: SalesType) {
+  private createCumulativeSalesAreaChart(title: string, dailySales: DailySales, salesType: SalesType) {
     this.cumulativeSalesByDayChartOptions.set(salesType, {
       title: {
         text: title,
@@ -170,20 +170,21 @@ export class AnalyticsComponent {
         data: this.analyticsService.allDays
       },
       yAxis: {
-        type: 'value'
+        type: 'value',
       },
       series: this.analyticsService.allProducts.map(x => ({
         name: x,
         type: 'line',
         stack: 'total',
         areaStyle: {},
+        showSymbol: false,
         label: {
           show: false
         },
         emphasis: {
           focus: 'series'
         },
-        data: sales.getCumulativeProductSales(x, salesType),
+        data: dailySales.getCumulativeProductSales(x, salesType),
         large: true
       }))
     });

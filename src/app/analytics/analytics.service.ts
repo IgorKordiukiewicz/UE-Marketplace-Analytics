@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SaleItem } from '../shared/models/SaleItem';
-import { Sales } from '../shared/models/Sales';
+import { DailySales } from '../shared/models/DailySales';
 
 
 @Injectable({
@@ -19,8 +19,8 @@ export class AnalyticsService {
     this.allDays = this.getAllDays();
   }
 
-  getSalesData(items: SaleItem[]) {
-    let sales = new Sales(this.allProducts);
+  getDailySales(items: SaleItem[]) {
+    let sales = new DailySales(this.allProducts);
 
     for(let day of this.allDays) {
       for(let product of this.allProducts) {
