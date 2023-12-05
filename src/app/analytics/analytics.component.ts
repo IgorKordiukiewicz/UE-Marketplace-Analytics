@@ -46,6 +46,7 @@ export class AnalyticsComponent {
 
   totalRevenue?: number;
   totalUnitsSold?: number;
+  totalRefunds?: number;
 
   constructor(private analyticsService: AnalyticsService) {}
 
@@ -82,8 +83,10 @@ export class AnalyticsComponent {
     this.analyticsService.setItems(this.items);
     let dailySales = this.analyticsService.getDailySales(this.items);
     let salesTotals = this.analyticsService.getSalesTotals(this.items);
+
     this.totalRevenue = salesTotals.getSalesTotals(SalesType.Revenue);
     this.totalUnitsSold = salesTotals.getSalesTotals(SalesType.Units);
+    this.totalRefunds = this.analyticsService.getTotalRefunds(this.items);
 
     this.createSalesBarChart(dailySales, SalesType.Revenue);
     this.createSalesBarChart(dailySales, SalesType.Units);
