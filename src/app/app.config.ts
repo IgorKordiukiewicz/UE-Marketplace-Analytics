@@ -5,7 +5,7 @@ import { routes } from './app.routes';
 
 import { NgxEchartsModule } from 'ngx-echarts';
 import * as echarts from 'echarts/core';
-import { BarChart, LineChart } from 'echarts/charts';
+import { BarChart, LineChart, PieChart  } from 'echarts/charts';
 import {
   TitleComponent,
   TooltipComponent,
@@ -21,7 +21,7 @@ echarts.use(
   [
     TitleComponent, TooltipComponent, GridComponent,
     LegendComponent, BarChart, CanvasRenderer,
-    DataZoomComponent, LineChart
+    DataZoomComponent, LineChart, PieChart
   ]
 );
 

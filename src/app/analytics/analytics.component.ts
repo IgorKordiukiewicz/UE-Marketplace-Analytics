@@ -36,6 +36,7 @@ export class AnalyticsComponent {
 
   salesByDayChartOptions = new Map<SalesType, EChartsOption>();
   cumulativeSalesByDayChartOptions = new Map<SalesType, EChartsOption>();
+  salesTotalsChartOptions = new Map<SalesType, EChartsOption>();
 
   constructor(private analyticsService: AnalyticsService) {}
 
@@ -70,12 +71,16 @@ export class AnalyticsComponent {
   createChartData() {
     this.analyticsService.setItems(this.items);
     let dailySales = this.analyticsService.getDailySales(this.items);
+    let salesTotals = this.analyticsService.getSalesTotals(this.items);
 
     this.createSalesBarChart('Revenue per day', dailySales, SalesType.Revenue);
     this.createSalesBarChart('Units sold per day', dailySales, SalesType.Units);
 
     this.createCumulativeSalesAreaChart('Cumulative revenue per day', dailySales, SalesType.Revenue);
     this.createCumulativeSalesAreaChart('Cumulative units sold per day', dailySales, SalesType.Units);
+
+    this.createSalesTotalsPieChart('Total revenue', salesTotals, SalesType.Revenue);
+    this.createSalesTotalsPieChart('Total units sold', salesTotals, SalesType.Units);
   }
 
   private createSalesBarChart(title: string, dailySales: DailySales, salesType: SalesType) {
@@ -187,6 +192,55 @@ export class AnalyticsComponent {
         data: dailySales.getCumulativeProductSales(x, salesType),
         large: true
       }))
+    });
+  }
+
+  private createSalesTotalsPieChart(title: string, salesTotals: Map<SalesType, [string, number][]>, salesType: SalesType) {
+    this.salesTotalsChartOptions.set(salesType, {
+      title: {
+        text: title,
+        left: 'center',
+        textStyle: {
+          color: '#fbfbfe'
+        }
+      },
+      tooltip: {
+        trigger: 'item'
+      },
+      legend: {
+        top: '7%',
+        left: 'center',
+        textStyle: {
+          color: '#fbfbfe'
+        }
+      },
+      series: [
+        {
+          name: 'Total',
+          type: 'pie',
+          radius: ['40%', '70%'],
+          avoidLabelOverlap: false,
+          label: {
+            show: false,
+            position: 'center'
+          },
+          emphasis: {
+            label: {
+              show: true,
+              fontSize: 30,
+              fontWeight: 'bold',
+              color: '#fbfbfe'
+            }
+          },
+          labelLine: {
+            show: false
+          },
+          data: salesTotals.get(salesType)!.map(([product, value]) => ({
+            name: product,
+            value: value
+          }))
+        }
+      ]
     });
   }
 }
