@@ -3,7 +3,9 @@
   <button pButton label="Continue" class="p-button-success" style="width: 100%;" [disabled]="!uploadedFile" (click)="onContinue()"></button>
 </div>
 
-<ng-container *ngIf="salesByDayChartOptions.size > 0">
+<p-progressSpinner *ngIf="processing" class="screen-center"></p-progressSpinner>
+
+<ng-container *ngIf="!processing && fileSubmitted">
   <div class="flex gap-4 align-items-center">
     <h2>Sales per day</h2>
     <p-selectButton [options]="salesTypeSelectOptions" [(ngModel)]="salesTypeSelected"></p-selectButton>

@@ -12,6 +12,7 @@ import { DailySales } from '../shared/models/DailySales';
 import { SalesType } from '../shared/models/SalesType';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule } from '@angular/forms';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 interface UploadEvent {
   originalEvent: HttpEvent<any>;
@@ -21,7 +22,7 @@ interface UploadEvent {
 @Component({
   selector: 'app-analytics',
   standalone: true,
-  imports: [ FileUploadModule, ButtonModule, CommonModule, NgxEchartsModule, SelectButtonModule, FormsModule ],
+  imports: [ FileUploadModule, ButtonModule, CommonModule, NgxEchartsModule, SelectButtonModule, FormsModule, ProgressSpinnerModule ],
   templateUrl: './analytics.component.html',
   styleUrl: './analytics.component.scss'
 })
@@ -30,6 +31,7 @@ export class AnalyticsComponent {
   uploadedFile?: File;
   fileSubmitted = false;
   items: SaleItem[] = [];
+  processing = false;
 
   salesTypeSelected = SalesType.Revenue;
   salesTypeSelectOptions = [ { label: 'Revenue', value: SalesType.Revenue }, { label: 'Units', value: SalesType.Units } ];
@@ -49,6 +51,9 @@ export class AnalyticsComponent {
       return;
     }
 
+    this.fileSubmitted = true;
+    this.processing = true;
+
     Papa.parse(this.uploadedFile, {
       header: true,
       skipEmptyLines: true,
@@ -64,8 +69,6 @@ export class AnalyticsComponent {
         this.createChartData();
       }
     });
-
-    this.fileSubmitted = true;
   }
 
   createChartData() {
@@ -81,6 +84,8 @@ export class AnalyticsComponent {
 
     this.createSalesTotalsPieChart('Total revenue', salesTotals, SalesType.Revenue);
     this.createSalesTotalsPieChart('Total units sold', salesTotals, SalesType.Units);
+
+    this.processing = false;
   }
 
   private createSalesBarChart(title: string, dailySales: DailySales, salesType: SalesType) {
