@@ -4,3 +4,24 @@
   position: absolute;
   transform: translate(-50%, -50%);
 }
+
+.analytics-cards {
+  padding: 1.5rem;
+  grid-auto-flow: column;
+}
+
+.overview-card {
+  display: flex;
+  flex-direction: column;
+  column-gap: 50px;
+  height: 100%;
+}
+
+.overview-card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  padding-left: 1.25rem;
+  padding-top: 1.25rem;
+  padding-right: 1.25rem;
+}

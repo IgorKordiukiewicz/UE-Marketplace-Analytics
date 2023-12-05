@@ -14,6 +14,8 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule } from '@angular/forms';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { SalesTotals } from '../shared/models/SalesTotals';
+import { CardModule } from 'primeng/card';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 interface UploadEvent {
   originalEvent: HttpEvent<any>;
@@ -23,7 +25,8 @@ interface UploadEvent {
 @Component({
   selector: 'app-analytics',
   standalone: true,
-  imports: [ FileUploadModule, ButtonModule, CommonModule, NgxEchartsModule, SelectButtonModule, FormsModule, ProgressSpinnerModule ],
+  imports: [ FileUploadModule, ButtonModule, CommonModule, NgxEchartsModule,
+    SelectButtonModule, FormsModule, ProgressSpinnerModule, CardModule ],
   templateUrl: './analytics.component.html',
   styleUrl: './analytics.component.scss'
 })
@@ -82,28 +85,20 @@ export class AnalyticsComponent {
     this.totalRevenue = salesTotals.getSalesTotals(SalesType.Revenue);
     this.totalUnitsSold = salesTotals.getSalesTotals(SalesType.Units);
 
-    this.createSalesBarChart('Revenue per day', dailySales, SalesType.Revenue);
-    this.createSalesBarChart('Units sold per day', dailySales, SalesType.Units);
+    this.createSalesBarChart(dailySales, SalesType.Revenue);
+    this.createSalesBarChart(dailySales, SalesType.Units);
 
-    this.createCumulativeSalesAreaChart('Cumulative revenue per day', dailySales, SalesType.Revenue);
-    this.createCumulativeSalesAreaChart('Cumulative units sold per day', dailySales, SalesType.Units);
+    this.createCumulativeSalesAreaChart(dailySales, SalesType.Revenue);
+    this.createCumulativeSalesAreaChart(dailySales, SalesType.Units);
 
-    this.createSalesTotalsPieChart('Total revenue', salesTotals, SalesType.Revenue);
-    this.createSalesTotalsPieChart('Total units sold', salesTotals, SalesType.Units);
+    this.createSalesTotalsPieChart(salesTotals, SalesType.Revenue);
+    this.createSalesTotalsPieChart(salesTotals, SalesType.Units);
 
     this.processing = false;
   }
 
-  private createSalesBarChart(title: string, dailySales: DailySales, salesType: SalesType) {
+  private createSalesBarChart(dailySales: DailySales, salesType: SalesType) {
     this.salesByDayChartOptions.set(salesType, {
-      title: {
-        text: title,
-        left: 'center',
-        textStyle: {
-          color: '#fbfbfe'
-        },
-        show: false
-      },
       tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -149,16 +144,8 @@ export class AnalyticsComponent {
     })
   }
 
-  private createCumulativeSalesAreaChart(title: string, dailySales: DailySales, salesType: SalesType) {
+  private createCumulativeSalesAreaChart(dailySales: DailySales, salesType: SalesType) {
     this.cumulativeSalesByDayChartOptions.set(salesType, {
-      title: {
-        text: title,
-        left: 'center',
-        textStyle: {
-          color: '#fbfbfe'
-        },
-        show: false
-      },
       tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -206,15 +193,8 @@ export class AnalyticsComponent {
     });
   }
 
-  private createSalesTotalsPieChart(title: string, salesTotals: SalesTotals, salesType: SalesType) {
+  private createSalesTotalsPieChart(salesTotals: SalesTotals, salesType: SalesType) {
     this.salesTotalsChartOptions.set(salesType, {
-      title: {
-        text: title,
-        left: 'center',
-        textStyle: {
-          color: '#fbfbfe'
-        }
-      },
       tooltip: {
         trigger: 'item'
       },
