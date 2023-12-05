@@ -13,4 +13,6 @@
   <div echarts [options]="salesByDayChartOptions.get(salesTypeSelected)!"></div>
   <div echarts [options]="cumulativeSalesByDayChartOptions.get(salesTypeSelected)!"></div>
   <div echarts [options]="salesTotalsChartOptions.get(salesTypeSelected)!"></div>
+  <h2>{{totalRevenue}}</h2>
+  <h2>{{totalUnitsSold}}</h2>
 </ng-container>

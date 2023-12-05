@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { SaleItem } from '../shared/models/SaleItem';
 import { DailySales } from '../shared/models/DailySales';
 import { SalesType } from '../shared/models/SalesType';
+import { SalesTotals } from '../shared/models/SalesTotals';
 
 
 @Injectable({
@@ -42,21 +43,7 @@ export class AnalyticsService {
   }
 
   getSalesTotals(items: SaleItem[]) {
-    let salesTotals = new Map<SalesType, [string, number][]>();
-
-    let totalRevenues: [string, number][] = [];
-    let totalUnitsSold: [string, number][] = [];
-    for(let product of this.allProducts) {
-      let allProductItems = this.items.filter(x => x.product === product);
-      let totalUnits = allProductItems.reduce((sum, item) => sum + item.netUnits, 0);
-      let totalRevenue = allProductItems.reduce((sum, item) => sum + (item.basePrice * item.netUnits), 0);
-      totalRevenues.push([product, totalRevenue]);
-      totalUnitsSold.push([product, totalUnits]);
-    }
-
-    salesTotals.set(SalesType.Revenue, totalRevenues);
-    salesTotals.set(SalesType.Units, totalUnitsSold);
-    return salesTotals;
+    return new SalesTotals(this.allProducts, items);
   }
 
   private getAllProducts() {

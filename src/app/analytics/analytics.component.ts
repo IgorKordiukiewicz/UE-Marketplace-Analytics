@@ -13,6 +13,7 @@ import { SalesType } from '../shared/models/SalesType';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule } from '@angular/forms';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { SalesTotals } from '../shared/models/SalesTotals';
 
 interface UploadEvent {
   originalEvent: HttpEvent<any>;
@@ -39,6 +40,9 @@ export class AnalyticsComponent {
   salesByDayChartOptions = new Map<SalesType, EChartsOption>();
   cumulativeSalesByDayChartOptions = new Map<SalesType, EChartsOption>();
   salesTotalsChartOptions = new Map<SalesType, EChartsOption>();
+
+  totalRevenue?: number;
+  totalUnitsSold?: number;
 
   constructor(private analyticsService: AnalyticsService) {}
 
@@ -75,6 +79,8 @@ export class AnalyticsComponent {
     this.analyticsService.setItems(this.items);
     let dailySales = this.analyticsService.getDailySales(this.items);
     let salesTotals = this.analyticsService.getSalesTotals(this.items);
+    this.totalRevenue = salesTotals.getSalesTotals(SalesType.Revenue);
+    this.totalUnitsSold = salesTotals.getSalesTotals(SalesType.Units);
 
     this.createSalesBarChart('Revenue per day', dailySales, SalesType.Revenue);
     this.createSalesBarChart('Units sold per day', dailySales, SalesType.Units);
@@ -200,7 +206,7 @@ export class AnalyticsComponent {
     });
   }
 
-  private createSalesTotalsPieChart(title: string, salesTotals: Map<SalesType, [string, number][]>, salesType: SalesType) {
+  private createSalesTotalsPieChart(title: string, salesTotals: SalesTotals, salesType: SalesType) {
     this.salesTotalsChartOptions.set(salesType, {
       title: {
         text: title,
@@ -240,7 +246,7 @@ export class AnalyticsComponent {
           labelLine: {
             show: false
           },
-          data: salesTotals.get(salesType)!.map(([product, value]) => ({
+          data: salesTotals.getSalesTotalsForProducts(salesType).map(([product, value]) => ({
             name: product,
             value: value
           }))
