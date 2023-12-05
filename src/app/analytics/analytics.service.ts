@@ -47,7 +47,7 @@ export class AnalyticsService {
   }
 
   getTotalRefunds(items: SaleItem[]) {
-    return items.filter(x => x.netUnits < 0).reduce((sum, item) => sum + item.netUnits, 0);
+    return items.filter(x => x.netUnits < 0).reduce((sum, item) => sum + item.netUnits, 0) * -1;
   }
 
   private getAllProducts() {
