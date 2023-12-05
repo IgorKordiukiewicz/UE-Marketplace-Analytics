@@ -38,7 +38,7 @@ export class AnalyticsComponent {
   processing = false;
 
   salesTypeSelected = SalesType.Revenue;
-  salesTypeSelectOptions = [ { label: 'Revenue', value: SalesType.Revenue }, { label: 'Units', value: SalesType.Units } ];
+  salesTypeSelectOptions = [ { label: 'Revenue', value: SalesType.Revenue }, { label: 'Units sold', value: SalesType.Units } ];
 
   salesByDayChartOptions = new Map<SalesType, EChartsOption>();
   cumulativeSalesByDayChartOptions = new Map<SalesType, EChartsOption>();
@@ -47,6 +47,11 @@ export class AnalyticsComponent {
   totalRevenue?: number;
   totalUnitsSold?: number;
   totalRefunds?: number;
+
+  salesTypeDisplay = new Map<SalesType, string>([
+    [ SalesType.Revenue, 'Revenue' ],
+    [ SalesType.Units, 'Units sold' ]
+  ])
 
   constructor(private analyticsService: AnalyticsService) {}
 

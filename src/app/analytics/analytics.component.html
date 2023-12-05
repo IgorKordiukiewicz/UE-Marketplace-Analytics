@@ -41,23 +41,23 @@
   <div class="col-9">
     <div class="card">
       <div class="card-title">
-        Sales by day
+        {{salesTypeDisplay.get(salesTypeSelected)}} by day
       </div>
       <div echarts [options]="salesByDayChartOptions.get(salesTypeSelected)!" style="height: 90%;"></div>
     </div>
   </div>
-  <div header="Total sales" class="col-3">
+  <div class="col-3">
     <div class="card">
       <div class="card-title">
-        Total sales
+        Total {{salesTypeDisplay.get(salesTypeSelected)?.toLowerCase()}}
       </div>
       <div echarts [options]="salesTotalsChartOptions.get(salesTypeSelected)!"  style="height: 90%;"></div>
     </div>
   </div>
-  <div header="Cumulative sales by day" class="col-9">
+  <div class="col-9">
     <div class="card">
       <div class="card-title">
-        Cumulative sales by day
+        Cumulative {{salesTypeDisplay.get(salesTypeSelected)?.toLowerCase()}} by day
       </div>
       <div echarts [options]="cumulativeSalesByDayChartOptions.get(salesTypeSelected)!"  style="height: 90%;"></div>
     </div>
