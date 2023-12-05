@@ -10,7 +10,7 @@
     <div class="card flex flex-column gap-3">
       <div class="card-title flex justify-content-between">
         <span>Overview</span>
-        <p-selectButton [options]="salesTypeSelectOptions" [(ngModel)]="salesTypeSelected"></p-selectButton>
+        <p-selectButton [options]="salesTypeSelectOptions" [(ngModel)]="salesTypeSelected" [allowEmpty]="false"></p-selectButton>
       </div>
       <div class="card flex justify-content-between align-items-center" style="background: var(--green-500);">
         <span class="overview-card-title">

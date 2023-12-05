@@ -116,7 +116,7 @@ export class AnalyticsComponent {
       legend: {
         textStyle: {
           color: '#fbfbfe'
-        },
+        }
       },
       grid: {
         bottom: 90
@@ -146,7 +146,7 @@ export class AnalyticsComponent {
         emphasis: {
           focus: 'series'
         },
-        data: dailySales.getProductSales(x, salesType),
+        data: dailySales.getProductSales(x, salesType)?.map(x => this.formatValue(x, salesType)),
         large: true
       }))
     })
@@ -163,7 +163,7 @@ export class AnalyticsComponent {
       legend: {
         textStyle: {
           color: '#fbfbfe'
-        },
+        }
       },
       grid: {
         bottom: 90
@@ -195,7 +195,7 @@ export class AnalyticsComponent {
         emphasis: {
           focus: 'series'
         },
-        data: dailySales.getCumulativeProductSales(x, salesType),
+        data: dailySales.getCumulativeProductSales(x, salesType)?.map(x => this.formatValue(x, salesType)),
         large: true
       }))
     });
@@ -207,7 +207,6 @@ export class AnalyticsComponent {
         trigger: 'item'
       },
       legend: {
-        top: '7%',
         left: 'center',
         textStyle: {
           color: '#fbfbfe'
@@ -223,23 +222,19 @@ export class AnalyticsComponent {
             show: false,
             position: 'center'
           },
-          emphasis: {
-            label: {
-              show: true,
-              fontSize: 30,
-              fontWeight: 'bold',
-              color: '#fbfbfe'
-            }
-          },
           labelLine: {
             show: false
           },
           data: salesTotals.getSalesTotalsForProducts(salesType).map(([product, value]) => ({
             name: product,
-            value: value
+            value: this.formatValue(value, salesType)
           }))
         }
       ]
     });
+  }
+
+  private formatValue(item: number, salesType: SalesType) {
+    return +(salesType == SalesType.Revenue ? item.toFixed(2) : item);
   }
 }
