@@ -86,12 +86,12 @@ export class AnalyticsComponent {
 
   createChartData() {
     this.analyticsService.setItems(this.items);
-    let dailySales = this.analyticsService.getDailySales(this.items);
-    let salesTotals = this.analyticsService.getSalesTotals(this.items);
+    let dailySales = this.analyticsService.getDailySales();
+    let salesTotals = this.analyticsService.getSalesTotals();
 
     this.totalRevenue = salesTotals.getSalesTotals(SalesType.Revenue);
     this.totalUnitsSold = salesTotals.getSalesTotals(SalesType.Units);
-    this.totalRefunds = this.analyticsService.getTotalRefunds(this.items);
+    this.totalRefunds = this.analyticsService.getTotalRefunds();
 
     this.createSalesBarChart(dailySales, SalesType.Revenue);
     this.createSalesBarChart(dailySales, SalesType.Units);

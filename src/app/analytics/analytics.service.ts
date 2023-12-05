@@ -21,12 +21,12 @@ export class AnalyticsService {
     this.allDays = this.getAllDays();
   }
 
-  getDailySales(items: SaleItem[]) {
+  getDailySales() {
     let sales = new DailySales(this.allProducts);
 
     for(let day of this.allDays) {
       for(let product of this.allProducts) {
-        const item = items.find(x => x.day === day && x.product === product);
+        const item = this.items.find(x => x.day === day && x.product === product);
 
         let revenue = 0;
         let units = 0;
@@ -42,12 +42,12 @@ export class AnalyticsService {
     return sales;
   }
 
-  getSalesTotals(items: SaleItem[]) {
-    return new SalesTotals(this.allProducts, items);
+  getSalesTotals() {
+    return new SalesTotals(this.allProducts, this.items);
   }
 
-  getTotalRefunds(items: SaleItem[]) {
-    return items.filter(x => x.netUnits < 0).reduce((sum, item) => sum + item.netUnits, 0) * -1;
+  getTotalRefunds() {
+    return this.items.filter(x => x.netUnits < 0).reduce((sum, item) => sum + item.netUnits, 0) * -1;
   }
 
   private getAllProducts() {
