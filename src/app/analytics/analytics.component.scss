@@ -10,18 +10,26 @@
   grid-auto-flow: column;
 }
 
-.overview-card {
-  display: flex;
-  flex-direction: column;
-  column-gap: 50px;
-  height: 100%;
+.card {
+  background: #282936;
+  color: rgba(255, 255, 255, 0.87);
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
+  padding: 1.25rem;
+  height: calc(50vh - 3rem);
 }
 
-.overview-card-title {
+.card-title {
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  padding-left: 1.25rem;
-  padding-top: 1.25rem;
-  padding-right: 1.25rem;
+}
+
+.overview-card-title {
+  font-size: 2vh;
+}
+
+.overview-card-value {
+  font-size: 4vh;
+  font-weight: bold;
 }

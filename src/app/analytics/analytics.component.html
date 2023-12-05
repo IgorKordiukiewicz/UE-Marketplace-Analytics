@@ -6,32 +6,60 @@
 <p-progressSpinner *ngIf="processing" class="screen-center"></p-progressSpinner>
 
 <div class="grid analytics-cards" *ngIf="!processing && fileSubmitted">
-  <p-card class="col-3">
-    <ng-template pTemplate="header">
-      <div class="overview-card-title flex justify-content-between">
+  <div class="col-3">
+    <div class="card flex flex-column gap-3">
+      <div class="card-title flex justify-content-between">
         <span>Overview</span>
         <p-selectButton [options]="salesTypeSelectOptions" [(ngModel)]="salesTypeSelected"></p-selectButton>
       </div>
-    </ng-template>
-    <div class="overview-card">
-      <p-card subheader="Revenue"[style]="{ background: 'var(--green-500)' }">
-        {{totalRevenue}}
-      </p-card>
-      <p-card subheader="Units sold"  [style]="{ background: 'var(--blue-500)' }">
-        {{totalUnitsSold}}
-      </p-card>
-      <p-card subheader="Refunds"  [style]="{ background: 'var(--red-500)' }">
-        {{totalRefunds}}
-      </p-card>
+      <div class="card flex justify-content-between align-items-center" style="background: var(--green-500);">
+        <span class="overview-card-title">
+          Total Revenue
+        </span>
+        <span class="overview-card-value">
+          {{totalRevenue | currency}}
+        </span>
+      </div>
+      <div class="card flex justify-content-between align-items-center" style="background: var(--blue-500);">
+        <span class="overview-card-title">
+          Total Units Sold
+        </span>
+        <span class="overview-card-value">
+          {{totalUnitsSold}}
+        </span>
+      </div>
+      <div class="card flex justify-content-between align-items-center" style="background: var(--red-500);">
+        <span class="overview-card-title">
+          Total Refunds
+        </span>
+        <span class="overview-card-value">
+          {{totalRefunds}}
+        </span>
+      </div>
     </div>
-  </p-card>
-  <p-card header="Sales by day" class="col-9">
-    <div echarts [options]="salesByDayChartOptions.get(salesTypeSelected)!"></div>
-  </p-card>
-  <p-card header="Total sales" class="col-3">
-    <div echarts [options]="salesTotalsChartOptions.get(salesTypeSelected)!"></div>
-  </p-card>
-  <p-card header="Cumulative sales by day" class="col-9">
-    <div echarts [options]="cumulativeSalesByDayChartOptions.get(salesTypeSelected)!"></div>
-  </p-card>
+  </div>
+  <div class="col-9">
+    <div class="card">
+      <div class="card-title">
+        Sales by day
+      </div>
+      <div echarts [options]="salesByDayChartOptions.get(salesTypeSelected)!" style="height: 90%;"></div>
+    </div>
+  </div>
+  <div header="Total sales" class="col-3">
+    <div class="card">
+      <div class="card-title">
+        Total sales
+      </div>
+      <div echarts [options]="salesTotalsChartOptions.get(salesTypeSelected)!"  style="height: 90%;"></div>
+    </div>
+  </div>
+  <div header="Cumulative sales by day" class="col-9">
+    <div class="card">
+      <div class="card-title">
+        Cumulative sales by day
+      </div>
+      <div echarts [options]="cumulativeSalesByDayChartOptions.get(salesTypeSelected)!"  style="height: 90%;"></div>
+    </div>
+  </div>
 </div>
