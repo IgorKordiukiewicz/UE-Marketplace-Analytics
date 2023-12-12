@@ -74,7 +74,7 @@ export class AnalyticsComponent {
         const requiredColumns = ['Day', 'Product', 'Base Price', 'Net Units'];
         const actualColumns = results.meta.fields;
         const areAllColumnsPresent = requiredColumns.every(x => {
-          actualColumns?.includes(x)
+          return actualColumns?.includes(x)
         });
 
         if(!areAllColumnsPresent) {
