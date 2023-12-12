@@ -71,15 +71,27 @@ export class AnalyticsComponent {
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
+        const requiredColumns = ['Day', 'Product', 'Base Price', 'Net Units'];
+        const actualColumns = results.meta.fields;
+        const areAllColumnsPresent = requiredColumns.every(x => {
+          actualColumns?.includes(x)
+        });
+
+        if(!areAllColumnsPresent) {
+          this.processing = false;
+          this.fileSubmitted = false;
+          return;
+        }
+
         const data = results.data as any[];
-        this.items = data.map(row => ({
-          day: row['Day'],
-          product: row['Product'],
-          basePrice: +(row['Base Price'] as string).slice(1),
-          netUnits: +row['Net Units']
-        }));
-        this.items.pop();
-        this.createChartData();
+          this.items = data.map(row => ({
+            day: row['Day'],
+            product: row['Product'],
+            basePrice: +(row['Base Price'] as string).slice(1),
+            netUnits: +row['Net Units']
+          }));
+          this.items.pop();
+          this.createChartData();
       }
     });
   }
