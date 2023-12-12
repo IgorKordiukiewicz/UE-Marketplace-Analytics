@@ -16,6 +16,7 @@ import {
 import {
   CanvasRenderer
 } from 'echarts/renderers';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 echarts.use(
   [
@@ -28,6 +29,6 @@ echarts.use(
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    importProvidersFrom(NgxEchartsModule.forRoot({ echarts }))
+    importProvidersFrom([NgxEchartsModule.forRoot({ echarts }), BrowserAnimationsModule]),
   ]
 };

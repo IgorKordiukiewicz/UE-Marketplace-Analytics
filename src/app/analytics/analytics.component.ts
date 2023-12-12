@@ -15,7 +15,8 @@ import { FormsModule } from '@angular/forms';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { SalesTotals } from '../shared/models/SalesTotals';
 import { CardModule } from 'primeng/card';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 interface UploadEvent {
   originalEvent: HttpEvent<any>;
@@ -26,9 +27,10 @@ interface UploadEvent {
   selector: 'app-analytics',
   standalone: true,
   imports: [ FileUploadModule, ButtonModule, CommonModule, NgxEchartsModule,
-    SelectButtonModule, FormsModule, ProgressSpinnerModule, CardModule ],
+    SelectButtonModule, FormsModule, ProgressSpinnerModule, CardModule, ToastModule ],
   templateUrl: './analytics.component.html',
-  styleUrl: './analytics.component.scss'
+  styleUrl: './analytics.component.scss',
+  providers: [MessageService],
 })
 
 export class AnalyticsComponent {
@@ -53,7 +55,7 @@ export class AnalyticsComponent {
     [ SalesType.Units, 'Units sold' ]
   ])
 
-  constructor(private analyticsService: AnalyticsService) {}
+  constructor(private analyticsService: AnalyticsService, private messageService: MessageService) {}
 
   onFileUpload(event: UploadEvent) {
     this.uploadedFile = event.files[0];
@@ -80,6 +82,8 @@ export class AnalyticsComponent {
         if(!areAllColumnsPresent) {
           this.processing = false;
           this.fileSubmitted = false;
+          this.uploadedFile = undefined;
+          this.messageService.add({ severity: 'error', summary: 'File Error', detail: 'Uploaded file is not in the correct format!'})
           return;
         }
 
